@@ -1,0 +1,79 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	">
+
+	<bean id="savedRequestAwareAuthenticationSuccessHandler"
+		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<property name="targetUrlParameter" value="targetUrl" />
+	</bean>
+
+	<bean id="authProvider"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="userDetailsService" />
+		<property name="passwordEncoder" ref="encoder" />
+	</bean>
+
+	<bean id="encoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+
+
+	<bean id="hikariConfigSecurity" class="com.zaxxer.hikari.HikariConfig">
+		<property name="poolName" value="springHikariCPSecurity" />
+		<property name="dataSourceClassName" value="${jdbc.security.datasource}" />
+		<property name="dataSourceProperties">
+			<props>
+				<prop key="url">${jdbc.security.url}</prop>
+				<prop key="user">${jdbc.security.username}</prop>
+				<prop key="password">${jdbc.security.password}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="dataSourceSecurity" class="com.zaxxer.hikari.HikariDataSource"
+		primary="true" destroy-method="close">
+		<constructor-arg ref="hikariConfigSecurity" />
+	</bean>
+
+	<!-- bean id="dataSourceSecurity" primary="true" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" /> <property 
+		name="url" value="${jdbc.security.url}" /> <property name="username" value="${jdbc.security.username}" 
+		/> <property name="password" value="${jdbc.security.password}" /> </bean -->
+
+
+
+
+	<bean id="sessionFactorySecurity"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref local="dataSourceSecurity" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">validate</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+
+			</props>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>main.java.spring.boot.oauth2.model.User</value>
+				<value>main.java.spring.boot.oauth2.model.UserRole</value>
+				<value>main.java.spring.boot.oauth2.model.OauthClientDetails</value>
+				<value>main.java.spring.boot.oauth2.model.OauthClientToken</value>
+				<value>main.java.spring.boot.oauth2.model.OauthAccessToken</value>
+				<value>main.java.spring.boot.oauth2.model.OauthRefreshToken</value>
+				<value>main.java.spring.boot.oauth2.model.OauthCode</value>
+				<value>main.java.spring.boot.oauth2.model.OauthApprovals</value>
+				<value>main.java.spring.boot.oauth2.model.PersistentLogins</value>
+			</list>
+		</property>
+	</bean>
+
+
+</beans>
