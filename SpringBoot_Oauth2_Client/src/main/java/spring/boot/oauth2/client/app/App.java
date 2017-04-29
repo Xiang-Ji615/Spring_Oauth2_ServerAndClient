@@ -29,8 +29,9 @@ public class App implements CommandLineRunner {
 	public void run(String... arg0) throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("Sprin boot works");
-		System.out.println(restTemplate.getOAuth2ClientContext());
+//		System.out.println(restTemplate.getOAuth2ClientContext());
 		System.out.println(restTemplate.getAccessToken());
+		System.out.println(restTemplate.getForObject("http://localhost:8080/SpringOauth2/Rest/Test", String.class));
 
 	}
 
