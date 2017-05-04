@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.RequestEntity;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 
 
@@ -31,8 +32,7 @@ public class App implements CommandLineRunner {
 		System.out.println("Sprin boot works");
 //		System.out.println(restTemplate.getOAuth2ClientContext());
 		System.out.println(restTemplate.getAccessToken());
-		System.out.println(restTemplate.getForObject("http://localhost:8080/SpringOauth2/Rest/Test", String.class));
-
+		System.out.println(restTemplate.getForObject("http://localhost:8080/Rest/Test", String.class));
 	}
 
 }
